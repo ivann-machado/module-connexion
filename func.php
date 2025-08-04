@@ -42,7 +42,7 @@ function connectUser(object $db, array $user) {
 	$errors = [0, 0]; // login, pw
 	switch (true) {
 		case !array_filter($user):
-			throw new Exception("55");
+			throw new Exception(errorHandler('55'));
 			break;
 		case empty($user['login']):
 			$errors[0] = 1;
@@ -69,7 +69,30 @@ function connectUser(object $db, array $user) {
 	}
 }
 
-function errorHandler(int $errorCode) => string {
+function updateUser(object $db, array $user, array $userUpdate): bool {
+	$errors = [0, 0]; // login, pw
+	switch (true) {
+		case !array_filter($userUpdate):
+			throw new Exception(errorHandler('55'));
+			break;
+		case $user['password'] !== $user['pwc']:
+			$errors[1] = 4;
+	}
+	$query = '';
+	foreach ($userUpdate as $key => $value) {
+		if (in_array($key, ['prenom', 'nom']) && !empty($value) && $user[$key] !== $value) {
+			$query .= '`'.$key.'` = "'.htmlspecialchars($value).'", ';
+		}
+		if ($key === 'password' && !empty($value) && $user['password'] !== $value) {
+			$query .= '`password` = "'.password($value, $user['date']).'", ';
+		}
+	}
+	$query = rtrim($query, ', ');
+	mysqli_query($db, 'UPDATE `utilisateurs` SET '.$query.' WHERE `id` = '.$user['id']);
+	return true;
+}
+
+function errorHandler(int $errorCode): string {
 	$errors = [
 		'01' => 'Mot de passe vide',
 		'02' => 'Confirmation du mot de passe vide',
@@ -84,16 +107,13 @@ function errorHandler(int $errorCode) => string {
 	return $errors[$errorCode] ?? $errors['55'];
 }
 
-
-
-function password(string $password, int $salt) => string {
+function password(string $password, int $salt): string {
 	return password_hash('saltyicecream'.$password.$salt, PASSWORD_BCRYPT);
 }
 
-function passwordVerify(string $password, int $salt, string $hash) => bool {
+function passwordVerify(string $password, int $salt, string $hash): bool {
 	return password_verify('saltyicecream'.$password.$salt, $hash);
 }
-
 
 function logout() {
 	session_destroy();
