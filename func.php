@@ -75,8 +75,8 @@ function updateUser(object $db, array $user, array $userUpdate): bool {
 		case !array_filter($userUpdate):
 			throw new Exception(errorHandler('55'));
 			break;
-		case $user['password'] !== $user['pwc']:
-			$errors[1] = 4;
+		case $userUpdate['password'] !== $userUpdate['pwc']:
+			$errors[1] = 3;
 	}
 	$query = '';
 	foreach ($userUpdate as $key => $value) {
