@@ -1,5 +1,4 @@
 		<!-- Main -->
-
 		<article id="home" class="panel intro">
 			<header>
 				<h1>Module Connexion</h1>

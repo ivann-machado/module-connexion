@@ -210,3 +210,13 @@
 		}
 
 })(jQuery);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const messageBox = document.querySelector('.greenbox, .redbox'); // Select the success or error box
+
+    window.addEventListener('hashchange', () => {
+        if (messageBox) {
+            messageBox.style.display = 'none'; // Hide the box when the anchor changes
+        }
+    });
+});

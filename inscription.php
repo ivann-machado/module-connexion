@@ -16,6 +16,7 @@ $user = [
 
 try {
 	createUser(getDB(), $user);
+	$_SESSION['success'] = 'Inscription réussie !';
 	header("Location: ./index.php?success=1#login");
 	exit();
 } catch (Exception $e) {

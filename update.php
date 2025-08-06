@@ -17,6 +17,7 @@ $user = [
 ];
 try {
 	$_SESSION['user'] = updateUser(getDB(), $_SESSION['user'], $user);
+	$_SESSION['success'] = 'Modification réussie !';
 	header("Location: ./index.php?success=1#profil");
 	exit();
 } catch (Exception $e) {

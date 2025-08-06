@@ -99,9 +99,13 @@ function updateUser(array $db, array $user, array $userUpdate): array {
 			$query[] = '`password` = "'.password($value, $user['date']).'"';
 		}
 	}
-	$_SESSION['dump'] = $query;
-	mysqli_query($db[1], 'UPDATE `utilisateurs` SET '.implode(', ',$query).' WHERE `id` = '.$user['id']);
-	return $userUpdate;
+	if (empty($query)) {
+		throw new Exception(errorHandler('77'));
+	}
+	else {
+		mysqli_query($db[1], 'UPDATE `utilisateurs` SET '.implode(', ',$query).' WHERE `id` = '.$user['id']);
+		return $userUpdate;
+	}
 }
 
 function listUsers(array $db, int $offset = 0): array {
@@ -134,7 +138,8 @@ function errorHandler(mixed $errorCode): string {
 		'20' => 'Identifiant déjà utilisé',
 		'30' => 'La combinaison identifiant/mot de passe est incorrecte', //login
 		'55' => 'Veuillez remplir tous les champs',
-		'66' => 'Erreur de connexion à la base de données'
+		'66' => 'Erreur de connexion à la base de données',
+		'77' => 'Aucun changement'
 	];
 	return $errors[$errorCode] ?? $errors['55'];
 }

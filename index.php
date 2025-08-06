@@ -10,6 +10,8 @@ if (isset($_GET['logout'])) {
 include 'views/head.php';
 
 include 'views/main.php';
+//switch of below code
+
 if (isset($_SESSION['user']) && $_SESSION['user']['admin']) {
 	include 'views/admin.php';
 }
@@ -23,5 +25,8 @@ else {
 include 'views/foot.php';
 if (isset($_SESSION['error'])) {
 	unset($_SESSION['error']);
+}
+if (isset($_SESSION['success'])) {
+	unset($_SESSION['success']);
 }
 ?>

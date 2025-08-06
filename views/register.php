@@ -4,8 +4,8 @@
 			</header>
 			<form action="./inscription.php" method="post">
 				<div class="row">
-					<?php if (isset($_GET['error']) && isset($_SESSION['error'])): ?>
-						<div class="col-12"><div class="redbox"><?php echo htmlspecialchars($_SESSION['error']) ?></div></div>
+					<?php if ((isset($_GET['error']) && isset($_SESSION['error']))XOR (isset($_GET['success']) && isset($_SESSION['success']))): ?>
+						<div class="col-12"><div class="<?php echo isset($_SESSION['error']) ? 'red' : 'green'?>box"><?php echo isset($_SESSION['error']) ? htmlspecialchars($_SESSION['error']) : htmlspecialchars($_SESSION['success']) ?></div></div>
 					<?php endif;?>
 					<div class="col-12">
 						<label for="login">Login</label>
