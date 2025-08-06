@@ -4,14 +4,9 @@
 			</header>
 			<form action="./inscription.php" method="post">
 				<div class="row">
-					<?php 
-					// redbox when there is an error in $_SESSION['error']
-					if (isset($_SESSION['error'])): ?>
+					<?php if (isset($_GET['error']) && isset($_SESSION['error'])): ?>
 						<div class="col-12"><div class="redbox"><?php echo htmlspecialchars($_SESSION['error']) ?></div></div>
-						<?php
-					endif;
-					unset($_SESSION['error']);
-					?>
+					<?php endif;?>
 					<div class="col-12">
 						<label for="login">Login</label>
 						<input type="text" id="login" name="login" required>

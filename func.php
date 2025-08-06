@@ -12,21 +12,21 @@ function createUser(array $db, array $user) {
 	$errors = [0, 0]; // login, pw
 	switch (true) {
 		case !array_filter($user):
-			throw new Exception(errorHandler(55));
-			break;
+		throw new Exception(errorHandler(55));
+		break;
 		case !$db[0]:
-			throw new Exception(errorHandler(66));
-			break;
+		throw new Exception(errorHandler(66));
+		break;
 		case empty($user['login']):
-			$errors[0] = 1;
+		$errors[0] = 1;
 		case empty($user['password']):
-			$errors[1] = 1;
+		$errors[1] = 1;
 		case empty($user['pwc']):
-			$errors[1] += 2;
+		$errors[1] += 2;
 		case $user['password'] !== $user['pwc']:
-			$errors[1] = 4;
+		$errors[1] = 4;
 		case mysqli_num_rows(mysqli_query($db[1], 'SELECT `login` FROM `utilisateurs` WHERE `login` = "'.htmlspecialchars($user['login']).'"')) != 0:
-			$errors[0] = 2;
+		$errors[0] = 2;
 	}
 	if (array_sum($errors) > 0) {
 		throw new Exception(errorHandler(implode($errors)));
@@ -35,25 +35,25 @@ function createUser(array $db, array $user) {
 		$date = $_SERVER['REQUEST_TIME'];
 		$userPwd = password($user['password'], $date);
 		mysqli_query($db[1], 'INSERT INTO `utilisateurs` (`login`, `prenom`, `nom`, `password`) VALUES ("'.htmlspecialchars($user['login']).'", "'.htmlspecialchars($user['prenom']).'", "'.htmlspecialchars($user['nom']).'", "'.$userPwd.'")');
-		mysqli_query($db[1], 'INSERT INTO `date_inscription` (`date`, `id_utilisateur`) VALUES (FROM_UNIXTIME("'.$date.'"), "'.mysqli_insert_id($db[1]).'")');
-		return true;
-	}
-	
-}
+			mysqli_query($db[1], 'INSERT INTO `date_inscription` (`date`, `id_utilisateur`) VALUES (FROM_UNIXTIME("'.$date.'"), "'.mysqli_insert_id($db[1]).'")');
+				return true;
+			}
 
-function connectUser(array $db, array $user) {
+		}
+
+		function connectUser(array $db, array $user) {
 	$errors = [0, 0]; // login, pw
 	switch (true) {
 		case !array_filter($user):
-			throw new Exception(errorHandler('55'));
-			break;
+		throw new Exception(errorHandler('55'));
+		break;
 		case !$db[0]:
-			throw new Exception(errorHandler('66'));
-			break;
+		throw new Exception(errorHandler('66'));
+		break;
 		case empty($user['login']):
-			$errors[0] = 1;
+		$errors[0] = 1;
 		case empty($user['password']):
-			$errors[1] = 1;
+		$errors[1] = 1;
 	}
 	if (array_sum($errors) > 0) {
 		throw new Exception(errorHandler(implode($errors)));
@@ -69,7 +69,7 @@ function connectUser(array $db, array $user) {
 				throw new Exception(errorHandler('05'));
 			}
 			else {
-				unset($userData['password']);
+				// unset($userData['password']);
 				$userData['admin'] = isAdmin($db[1], $userData['id']);
 				return $userData;
 			}
@@ -77,8 +77,8 @@ function connectUser(array $db, array $user) {
 	}
 }
 
-function updateUser(array $db, array $user, array $userUpdate): bool {
-	$errors = [0, 0]; // login, pw
+function updateUser(array $db, array $user, array $userUpdate): array {
+	// $errors = [0, 0]; // login, pw
 	switch (true) {
 		case !array_filter($userUpdate):
 			throw new Exception(errorHandler('55'));
@@ -87,20 +87,21 @@ function updateUser(array $db, array $user, array $userUpdate): bool {
 			throw new Exception(errorHandler('66'));
 			break;
 		case $userUpdate['password'] !== $userUpdate['pwc']:
-			$errors[1] = 3;
+			throw new Exception(errorHandler('04'));
+			break;
 	}
-	$query = '';
+	$query = [];
 	foreach ($userUpdate as $key => $value) {
 		if (in_array($key, ['prenom', 'nom']) && !empty($value) && $user[$key] !== $value) {
-			$query .= '`'.$key.'` = "'.htmlspecialchars($value).'", ';
+			$query[] = '`'.$key.'` = "'.htmlspecialchars($value).'"';
 		}
 		if ($key === 'password' && !empty($value) && $user['password'] !== $value) {
-			$query .= '`password` = "'.password($value, $user['date']).'", ';
+			$query[] = '`password` = "'.password($value, $user['date']).'"';
 		}
 	}
-	$query = rtrim($query, ', ');
-	mysqli_query($db[1], 'UPDATE `utilisateurs` SET '.$query.' WHERE `id` = '.$user['id']);
-	return true;
+	$_SESSION['dump'] = $query;
+	mysqli_query($db[1], 'UPDATE `utilisateurs` SET '.implode(', ',$query).' WHERE `id` = '.$user['id']);
+	return $userUpdate;
 }
 
 function listUsers(array $db, int $offset = 0): array {

@@ -4,6 +4,9 @@
 			</header>
 			<form action="./update.php" method="post">
 				<div class="row">
+					<?php if (isset($_GET['error']) && isset($_SESSION['error'])): ?>
+						<div class="col-12"><div class="redbox"><?php echo htmlspecialchars($_SESSION['error']) ?></div></div>
+					<?php endif;?>
 					<div class="col-12">
 						<label for="login">Login</label>
 						<div id="login"><?php echo htmlspecialchars($_SESSION['user']['login']); ?></div>

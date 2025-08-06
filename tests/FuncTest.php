@@ -50,7 +50,7 @@ class FuncTest extends TestCase
 
     public function testErrorHandler()
     {
-        $this->assertEquals('Mot de passe vide', errorHandler(01), 'Error message for code 01 should match');
+        $this->assertEquals('Mot de passe vide', errorHandler(1), 'Error message for code 01 should match');
         $this->assertEquals('Identifiant vide', errorHandler(10), 'Error message for code 10 should match');
     }
 }
