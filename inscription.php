@@ -21,7 +21,7 @@ try {
 	exit();
 } catch (Exception $e) {
 	$_SESSION['error'] = $e->getMessage();
-	header("Location: ./?error=1#signin");
+	header("Location: ./?error=1#register");
 	exit();
 }
 ?>
