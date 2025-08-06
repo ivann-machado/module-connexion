@@ -2,7 +2,7 @@
 session_start();
 require_once 'func.php';
 if (!isset($_POST) || !isset($_SESSION['user'])) {
-	header("Location: ./index.php");
+	header("Location: ./");
 	exit();
 }
 $user = [
@@ -18,11 +18,11 @@ $user = [
 try {
 	$_SESSION['user'] = updateUser(getDB(), $_SESSION['user'], $user);
 	$_SESSION['success'] = 'Modification réussie !';
-	header("Location: ./index.php?success=1#profil");
+	header("Location: ./?success=1#profil");
 	exit();
 } catch (Exception $e) {
 	$_SESSION['error'] = $e->getMessage();
-	header("Location: ./index.php?error=1#profil");
+	header("Location: ./?error=1#profil");
 	exit();
 }
 ?>

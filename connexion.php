@@ -2,7 +2,7 @@
 session_start();
 require_once 'func.php';
 if (!isset($_POST) || isset($_SESSION['user'])) {
-	header("Location: ./index.php");
+	header("Location: ./");
 	exit();
 }
 else {
@@ -12,11 +12,11 @@ else {
 	];
 	try {
 		$_SESSION['user'] = connectUser(getDB(), $user);
-		header("Location: ./index.php");
+		header("Location: ./");
 		exit();
 	} catch (Exception $e) {
 		$_SESSION['error'] = $e->getMessage();
-		header("Location: ./index.php?error=1#login");
+		header("Location: ./?error=1#login");
 		exit();
 	}
 }
