@@ -10,7 +10,16 @@ if (isset($_GET['logout'])) {
 include 'views/head.php';
 
 include 'views/main.php';
-
+if (isset($_SESSION['user']) && $_SESSION['user']['admin']) {
+	include 'views/admin.php';
+}
+if (isset($_SESSION['user'])) {
+	include 'views/profil.php';
+}
+else {
+	include 'views/signin.php';
+	include 'views/register.php';
+}
 include 'views/foot.php';
 if (isset($_SESSION['error'])) {
 	session_unregister('error');
