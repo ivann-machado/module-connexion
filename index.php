@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once 'func.php';
-// var_dump($_SESSION['error']);
 if (isset($_GET['logout'])) {
 	logout();
 }

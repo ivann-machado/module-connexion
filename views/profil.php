@@ -6,7 +6,7 @@
 				<div class="row">
 					<div class="col-12">
 						<label for="login">Login</label>
-						<input type="text" id="login" name="login" value="<?php echo htmlspecialchars($_SESSION['user']['login']); ?>" required>
+						<div id="login"><?php echo htmlspecialchars($_SESSION['user']['login']); ?></div>
 					</div>
 					<div class="col-6 col-12-medium">
 						<label for="prenom">Prénom</label>
